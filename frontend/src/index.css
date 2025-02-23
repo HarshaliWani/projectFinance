@@ -1,0 +1,45 @@
+.image-section {
+    position: relative;
+  }
+  
+  .overlay-text {
+    font-size: 2rem;
+    font-weight: bold;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 10px 20px;
+    border-radius: 10px;
+  }
+  
+  .features-section .card {
+    border: none;
+    border-radius: 10px;
+    transition: transform 0.3s ease-in-out;
+  }
+  
+  .features-section .card:hover {
+    transform: scale(1.05);
+  }
+
+  .testimonial-card {
+    height: 150px;  /* Adjust this value as needed */
+    display: flex;
+    align-items: center;
+  }
+  
+  .how-it-works-card {
+    height: 200px; /* Increase by 5cm (~190-200px) */
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+  
+  .how-it-works-card svg {
+    font-size: 3rem;  /* Increase icon size */
+    margin-bottom: 10px; /* Adjust spacing */
+  }
+
+  .icon {
+    font-size: 10rem;  /* Adjust icon size */
+  }
+  
