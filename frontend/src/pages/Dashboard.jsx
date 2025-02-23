@@ -25,15 +25,19 @@ const Dashboard = () => {
   };
 
   return (
-    <Container className="mt-4">
-      <div className="d-flex justify-content-between mb-3">
-        <Button onClick={handleToggleView}>
-          {showTable ? "View Chart" : "View Table"}
-        </Button>
-        <Button variant="success" onClick={handleShowForm}>
-          Add Expense
-        </Button>
-      </div>
+    <Container className="mt-4 ">
+      <Container className="mt-2 mb-4">
+        <div className="mt-4 mb-4">
+          <div className="d-flex justify-content-between mb-4">
+            <Button onClick={handleToggleView}>
+              {showTable ? "View Chart" : "View Table"}
+            </Button>
+            <Button variant="success" onClick={handleShowForm}>
+              Add Expense
+            </Button>
+          </div>
+        </div>
+      </Container>
 
       {showTable ? (
         <TransactionTable transactions={transactions} />

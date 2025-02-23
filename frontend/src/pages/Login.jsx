@@ -54,12 +54,12 @@ const Login = () => {
   };
 
   return (
-    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", backgroundColor: "#f3f4f6" }}>
+    <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
       <Container className="p-4 shadow-lg rounded bg-white" style={{ maxWidth: "450px" }}>
         <Row>
           <Col>
             <h1 className="text-center mb-4">
-              <AccountBalanceWalletIcon sx={{ fontSize: 40, color: "#7c3aed" }} />
+              <AccountBalanceWalletIcon sx={{ fontSize: 40, color: "#007bff" }} />
             </h1>
             <h2 className="text-center">Login / Sign Up</h2>
             <Form>

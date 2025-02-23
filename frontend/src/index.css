@@ -1,45 +1,96 @@
+.custom-color{
+  
+  background-color: #115d7a !important;
+}
 .image-section {
-    position: relative;
-  }
-  
-  .overlay-text {
-    font-size: 2rem;
-    font-weight: bold;
-    background: rgba(0, 0, 0, 0.5);
-    padding: 10px 20px;
-    border-radius: 10px;
-  }
-  
-  .features-section .card {
-    border: none;
-    border-radius: 10px;
-    transition: transform 0.3s ease-in-out;
-  }
-  
-  .features-section .card:hover {
-    transform: scale(1.05);
-  }
+  position: relative;
+}
 
-  .testimonial-card {
-    height: 150px;  /* Adjust this value as needed */
-    display: flex;
-    align-items: center;
-  }
-  
-  .how-it-works-card {
-    height: 200px; /* Increase by 5cm (~190-200px) */
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .how-it-works-card svg {
-    font-size: 3rem;  /* Increase icon size */
-    margin-bottom: 10px; /* Adjust spacing */
-  }
+.overlay-text {
+  font-size: 2rem;
+  font-weight: bold;
+  background: rgba(0, 0, 0, 0.5);
+  padding: 10px 20px;
+  border-radius: 10px;
+}
 
-  .icon {
-    font-size: 10rem;  /* Adjust icon size */
-  }
-  
+.testimonial-card {
+  height: auto;
+  /* Remove fixed height */
+  display: flex;
+  flex-direction: column;
+  /* Stack items vertically */
+  align-items: flex-start;
+  /* Align everything to the top left */
+  padding: 15px;
+  max-width: 250px;
+  /* Optional: Adjust width */
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+
+.how-it-works-card {
+  height: 200px;
+  /* Increase by 5cm (~190-200px) */
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.how-it-works-card svg {
+  font-size: 3rem;
+  /* Increase icon size */
+  margin-bottom: 10px;
+  /* Adjust spacing */
+}
+
+.icon {
+  font-size: 10rem;
+  /* Adjust icon size */
+}
+
+
+.dashboard-container {
+  display: flex;
+  flex-wrap: wrap;
+  /* Ensures responsiveness */
+  gap: 20px;
+  /* Adds spacing between cards */
+  justify-content: space-around;
+  /* Distributes evenly */
+}
+
+.chart-card {
+  flex: 1 1 300px;
+  /* Adjust width dynamically */
+  min-width: 300px;
+  /* Prevents shrinking too much */
+  background: white;
+  padding: 20px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.features-section .card {
+  height: 350px; /* Adjust height to make the card longer */
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Center content vertically */
+  align-items: center; /* Center content horizontally */
+  border: none;
+  border-radius: 10px;
+  transition: transform 0.3s ease-in-out;
+}
+
+.features-section .card:hover {
+  transform: scale(1.05);
+}
+
+.features-section .card svg {
+  font-size: 100px !important; /* Force the icon size */
+  width: 100px !important; /* Ensure width is increased */
+  height: 100px !important; /* Ensure height is increased */
+  margin-bottom: 40px !important; /* Increase space below the icon */
+}
+
