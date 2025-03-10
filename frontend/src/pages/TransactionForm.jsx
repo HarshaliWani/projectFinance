@@ -1,12 +1,16 @@
 import React, { useState } from "react";
 import { Form, Button } from "react-bootstrap";
+import { addTransactionAPI } from "../utils/ApiService";
+import { toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css"; // Ensure styles are included
 
 const TransactionForm = ({ addTransaction }) => {
   const [formData, setFormData] = useState({
     date: "",
     title: "",
     amount: "",
-    type: "Expense",
+    description: "",
+    transactionType: "expense",
     category: "Other",
   });
 
@@ -14,9 +18,32 @@ const TransactionForm = ({ addTransaction }) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    addTransaction(formData);
+    if (!formData.title || !formData.amount || !formData.category) {
+      toast.error("Please fill all fields!");  // ✅ Using toast
+      return;
+    }
+    const user = JSON.parse(localStorage.getItem("user"));  // ✅ Fetch user from localStorage
+
+    if (!user || !user.id) {
+      toast.error("User not found! Please log in again.");
+      return;
+    }
+    const formattedData = { ...formData, date: new Date(formData.date).toISOString().split("T")[0], userId: user?.id };
+
+    try {
+      const response = await addTransactionAPI(formattedData);
+      console.log("API Response:", response);
+      if (!response || !response.success) {
+        throw new Error(response?.message || "Unknown error");
+      }
+      toast.success("Transaction Added!");
+      addTransaction(response.transaction); // Add transaction to state
+    } catch (error) {
+      console.error("Add Transaction Error:", error);
+      toast.error("Failed to add transaction");
+    }
   };
 
   return (
@@ -34,10 +61,14 @@ const TransactionForm = ({ addTransaction }) => {
         <Form.Control type="number" name="amount" onChange={handleChange} required />
       </Form.Group>
       <Form.Group>
+        <Form.Label>Description</Form.Label>
+        <Form.Control type="text" name="description" onChange={handleChange} required />
+      </Form.Group>
+      <Form.Group>
         <Form.Label>Type</Form.Label>
-        <Form.Select name="type" onChange={handleChange}>
-          <option value="Expense">Expense</option>
-          <option value="Income">Income</option>
+        <Form.Select name="transactionType" onChange={handleChange}>
+          <option value="expense">Expense</option>
+          <option value="income">Income</option>
         </Form.Select>
       </Form.Group>
       <Form.Group>
@@ -52,7 +83,7 @@ const TransactionForm = ({ addTransaction }) => {
           <option value="Other">Other</option>
         </Form.Select>
       </Form.Group>
-      <Button variant="primary" type="submit" className="mt-2">
+      <Button variant="primary" type="submit" className="mt-2 rounded-pill px-4 ">
         Add Transaction
       </Button>
     </Form>

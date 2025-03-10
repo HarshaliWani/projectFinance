@@ -1,5 +1,16 @@
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { 
+  FaLock, 
+  FaChartLine, 
+  FaLightbulb, 
+  FaArrowRight, 
+  FaCreditCard, 
+  FaRegCalendarAlt, 
+  FaShieldAlt, 
+  FaMobileAlt, 
+  FaStar 
+} from "react-icons/fa";
 
 const Navbar = () => {
   const navigate = useNavigate();
@@ -13,12 +24,16 @@ const Navbar = () => {
   return (
     <nav className="navbar navbar-expand-lg navbar-dark bg-primary">
       <div className="container">
-        <Link className="navbar-brand" to="/">Finance Manager</Link>
+        <Link className="navbar-brand" to="/"><FaChartLine className="me-2 " size={24} />
+                    <span className="fw-bold">FinanceMaster</span></Link>
         <button 
           className="navbar-toggler" 
           type="button" 
           data-bs-toggle="collapse" 
           data-bs-target="#navbarNav"
+          aria-controls="navbarNav"
+          aria-expanded="false"
+          aria-label="Toggle navigation"
         >
           <span className="navbar-toggler-icon"></span>
         </button>
@@ -33,11 +48,11 @@ const Navbar = () => {
             </li>
             {isLoggedIn ? (
               <li className="nav-item">
-                <button className="btn btn-light" onClick={handleLogout}>Logout</button> {/* ✅ Styled same as Login */}
+                <button className="btn btn-light rounded-pill px-4" onClick={handleLogout}>Logout</button> {/* ✅ Styled same as Login */}
               </li>
             ) : (
               <li className="nav-item">
-                <Link className="btn btn-light" to="/login">Login</Link> {/* ✅ Button styling */}
+                <Link className="btn btn-light rounded-pill px-4" to="/login">Login</Link> {/* ✅ Button styling */}
               </li>
             )}
           </ul>

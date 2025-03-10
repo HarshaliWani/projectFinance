@@ -5,10 +5,10 @@ const jwt = require("jsonwebtoken");
 // User Registration Controller
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
+    const { email, password } = req.body;
 
     // Validate all fields are filled
-    if (!name || !email || !password) {
+    if (!email || !password) {
       return res.status(400).json({ success: false, message: "All fields are required!" });
     }
 
@@ -24,13 +24,14 @@ const registerUser = async (req, res) => {
 
     // Create new user
     const newUser = await User.create({
-      name,
       email,
       password: hashedPassword,
     });
 
     // Generate JWT Token
     const token = jwt.sign({ userId: newUser._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
+
+    console.log("Register Response:", { success: true, message: "User registered successfully!", token }); // Debugging Line
 
     res.status(201).json({ success: true, message: "User registered successfully!", token });
   } catch (error) {
@@ -63,11 +64,13 @@ const loginUser = async (req, res) => {
     // Generate JWT Token
     const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET, { expiresIn: "7d" });
 
+    console.log("Login Response:", { success: true, message: "Login successful!", token, user: { id: user._id, email: user.email } }); // Debugging Line
+
     res.status(200).json({
       success: true,
       message: "Login successful!",
       token,
-      user: { id: user._id, name: user.name, email: user.email },
+      user: { id: user._id, email: user.email },
     });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });

@@ -8,15 +8,22 @@ const TransactionChart = ({ transactions }) => {
     return <p className="text-center text-gray-500">No transactions available</p>;
   }
 
-  // Extract data dynamically
+  // Filter only expense transactions for Expense Overview and Expense Trend
+  const expenseTransactions = transactions.filter(tx => tx.transactionType === "expense");
+
+  // Extract data dynamically for expenses
+  const expenseLabels = expenseTransactions.map((tx) => tx.title);
+  const expenseAmounts = expenseTransactions.map((tx) => tx.amount);
+
+  // Extract data dynamically for all transactions
   const labels = transactions.map((tx) => tx.title);
   const amounts = transactions.map((tx) => tx.amount);
-  const income = transactions.filter(tx => tx.amount > 0).reduce((sum, tx) => sum + tx.amount, 0);
-  const expenses = transactions.filter(tx => tx.amount < 0).reduce((sum, tx) => sum + Math.abs(tx.amount), 0);
+  const income = transactions.filter(tx => tx.transactionType === "income").reduce((sum, tx) => sum + tx.amount, 0);
+  const expenses = expenseTransactions.reduce((sum, tx) => sum + tx.amount, 0);
 
   // Category breakdown dynamically
   const categoryData = transactions.reduce((acc, tx) => {
-    acc[tx.category] = (acc[tx.category] || 0) + Math.abs(tx.amount);
+    acc[tx.category] = (acc[tx.category] || 0) + tx.amount;
     return acc;
   }, {});
 
@@ -25,14 +32,14 @@ const TransactionChart = ({ transactions }) => {
     responsive: true,
     maintainAspectRatio: false,
     plugins: {
-      legend: { display: false },
+      legend: { display: true },
     },
   };
 
-  // Bar Chart - Transactions Overview
+  // Bar Chart - Expense Overview
   const barData = {
-    labels,
-    datasets: [{ label: "Amount", data: amounts, backgroundColor: "rgba(75,192,192,0.6)" }],
+    labels: expenseLabels,
+    datasets: [{ label: "Amount", data: expenseAmounts, backgroundColor: "rgba(75,192,192,0.6)" }],
   };
 
   // Pie Chart - Income vs. Expenses
@@ -41,10 +48,10 @@ const TransactionChart = ({ transactions }) => {
     datasets: [{ data: [income, expenses], backgroundColor: ["#4CAF50", "#FF5733"] }],
   };
 
-  // Line Chart - Transaction Trends
+  // Line Chart - Expense Trends
   const lineData = {
-    labels,
-    datasets: [{ label: "Transaction Trend", data: amounts, borderColor: "#4287f5", fill: false }],
+    labels: expenseLabels,
+    datasets: [{ label: "Expense Trend", data: expenseAmounts, borderColor: "#4287f5", fill: false }],
   };
 
   // Doughnut Chart - Category Breakdown
@@ -60,7 +67,7 @@ const TransactionChart = ({ transactions }) => {
           <div className="row mt-4">
             <div className="col-md-6 mb-4">
               <div className="card p-5 border border-gray-300 shadow-md min-h-[300px]">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4">Transaction Overview</h4>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Expense Overview</h4>
                 <div className="h-56">
                   <Bar data={barData} options={chartOptions} />
                 </div>
@@ -76,7 +83,7 @@ const TransactionChart = ({ transactions }) => {
             </div>
             <div className="col-md-6 mb-4">
               <div className="card p-5 border border-gray-300 shadow-md min-h-[300px]">
-                <h4 className="text-lg font-semibold text-gray-800 mb-4">Transaction Trend</h4>
+                <h4 className="text-lg font-semibold text-gray-800 mb-4">Expense Trend</h4>
                 <div className="h-56">
                   <Line data={lineData} options={chartOptions} />
                 </div>

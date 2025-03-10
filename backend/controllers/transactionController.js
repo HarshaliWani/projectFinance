@@ -6,6 +6,7 @@ const moment = require("moment");
 const addTransactionController = async (req, res) => {
   try {
     const { title, amount, description, date, category, transactionType } = req.body;
+    console.log(req.body);
 
     // Check if required fields are provided
     if (!title || !amount || !description || !date || !category || !transactionType) {
@@ -46,34 +47,19 @@ const addTransactionController = async (req, res) => {
 
 // ✅ Get All Transactions for a User
 const getAllTransactionController = async (req, res) => {
-    try {
-      const { type, frequency, startDate, endDate } = req.body;
-  
-      // Build query based on filters
-      const query = { user: req.user._id };
-      if (type && type !== "all") query.transactionType = type;
-  
-      if (frequency && frequency !== "custom") {
-        query.date = { $gt: moment().subtract(Number(frequency), "days").toDate() };
-      } else if (startDate && endDate) {
-        query.date = { $gte: moment(startDate).toDate(), $lte: moment(endDate).toDate() };
-      }
-  
-      // Get transactions from DB
-      const transactions = await Transaction.find(query);
-  
-      return res.status(200).json({
-        success: true,
-        transactions,
-      });
-  
-    } catch (err) {
-      return res.status(500).json({
-        success: false,
-        message: err.message,
-      });
+  try {
+    const transactions = await Transaction.find({ user: req.user._id });
+
+    if (!transactions || transactions.length === 0) {
+      return res.status(200).json({ success: true, transactions: [] });
     }
-  };
+
+    return res.status(200).json({ success: true, transactions });
+  } catch (err) {
+    console.error("Transaction Fetch Error:", err);
+    return res.status(500).json({ success: false, message: "Internal Server Error" });
+  }
+};
 
 // ✅ Delete Transaction
 const deleteTransactionController = async (req, res) => {

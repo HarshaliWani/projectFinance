@@ -1,9 +1,11 @@
 import { useState } from "react";
-import { Container, Row, Col, Form, Button } from "react-bootstrap";
+import React from 'react';
 import { useNavigate } from "react-router-dom";
+import { Form, Button, Container, Row, Col } from "react-bootstrap";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import AccountBalanceWalletIcon from "@mui/icons-material/AccountBalanceWallet";
+import { loginAPI, registerAPI } from "../utils/ApiService";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -23,33 +25,51 @@ const Login = () => {
     setValues({ ...values, [e.target.name]: e.target.value });
   };
 
-  const handleLogin = (e) => {
+  const handleLogin = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const user = users.find((user) => user.email === values.email && user.password === values.password);
 
-    if (user) {
-      localStorage.setItem("user", JSON.stringify({ email: values.email }));
-      toast.success("Login successful! Redirecting...", toastOptions);
-      setTimeout(() => navigate("/dashboard"), 2000);
-    } else {
-      toast.error("No such user! Please sign up.", toastOptions);
+    if (!values.email || !values.password) {
+      toast.error("Please enter email and password", toastOptions);
+      return;
+    }
+
+    try {
+      const response = await loginAPI(values);
+
+      if (response.success) {
+        localStorage.setItem("user", JSON.stringify(response.user));
+        localStorage.setItem("token", response.token); // Store JWT token
+        toast.success("Login successful! Redirecting...", toastOptions);
+        setTimeout(() => navigate("/dashboard"), 2000);
+      } else {
+        toast.error(response.message, toastOptions);
+      }
+    } catch (error) {
+      toast.error("Error logging in. Please try again!", toastOptions);
     }
   };
 
-  const handleSignUp = (e) => {
+  const handleSignUp = async (e) => {
     e.preventDefault();
-    const users = JSON.parse(localStorage.getItem("users")) || [];
-    const userExists = users.some((user) => user.email === values.email);
 
-    if (userExists) {
-      toast.error("User already exists! Please log in.", toastOptions);
-    } else {
-      users.push({ email: values.email, password: values.password });
-      localStorage.setItem("users", JSON.stringify(users));
-      localStorage.setItem("user", JSON.stringify({ email: values.email }));
-      toast.success("Sign up successful! Redirecting...", toastOptions);
-      setTimeout(() => navigate("/dashboard"), 2000);
+    if (!values.email || !values.password) {
+      toast.error("Please enter email and password", toastOptions);
+      return;
+    }
+
+    try {
+      const response = await registerAPI(values);
+
+      if (response.success) {
+        localStorage.setItem("user", JSON.stringify(response.user));
+        localStorage.setItem("token", response.token); // Store JWT token
+        toast.success("Sign up successful! Redirecting...", toastOptions);
+        setTimeout(() => navigate("/dashboard"), 2000);
+      } else {
+        toast.error(response.message, toastOptions);
+      }
+    } catch (error) {
+      toast.error("Error signing up. Please try again!", toastOptions);
     }
   };
 
