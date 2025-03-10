@@ -10,10 +10,3 @@
   
 -npm start
 
-## 📩 Postman API Collection
-
-To test API requests, you can import our Postman collection:
-
-👉 **[Download Postman Collection](./New Collection.postman_collection.json)**  
-📌 Import this file in **Postman** under `File > Import`.
-
