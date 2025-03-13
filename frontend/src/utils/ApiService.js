@@ -72,4 +72,15 @@ export const deleteTransactionAPI = async (id) => {
   }
 };
 
+export const editTransactionAPI = async (id, transactionData) => {
+  try {
+    const response = await API.put(`/transactions/updateTransaction/${id}`, transactionData);
+    console.log("Edit Transaction API Response:", response.data); // Debugging Line
+    return response.data;
+  } catch (error) {
+    console.error("Edit Transaction API Error:", error.response?.data || error.message);
+    return error.response?.data || { success: false, message: "Error editing transaction" };
+  }
+};
+
 export default API;

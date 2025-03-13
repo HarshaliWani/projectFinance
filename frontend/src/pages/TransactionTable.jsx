@@ -1,7 +1,8 @@
 import React from "react";
 import { Table, Button } from "react-bootstrap";
+import '../index.css'; // Import the CSS file
 
-const TransactionTable = ({ transactions, onDelete }) => {
+const TransactionTable = ({ transactions, onDelete, onEdit }) => {
   const formatDate = (dateString) => {
     const options = { day: '2-digit', month: '2-digit', year: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-GB', options);
@@ -30,7 +31,8 @@ const TransactionTable = ({ transactions, onDelete }) => {
             <td>{tx.transactionType}</td>
             <td>{tx.category}</td>
             <td>
-              <Button variant="danger" onClick={() => onDelete(tx._id)} className="rounded-pill px-4 py-1">Delete</Button> {/* Add Delete button */}
+              <Button  onClick={() => onEdit(tx)} className="btn btn-light btn-outline-primary rounded-pill px-4 py-1 me-2">Edit</Button> {/* Add Edit button */}
+              <Button  onClick={() => onDelete(tx._id)} className="btn btn-light btn-outline-danger rounded-pill px-4 py-1">Delete</Button> {/* Add Delete button */}
             </td>
           </tr>
         ))}

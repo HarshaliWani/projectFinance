@@ -94,3 +94,6 @@
   margin-bottom: 40px !important; /* Increase space below the icon */
 }
 
+.chart-container {
+  height: 400px; /* Adjust the height as needed */
+}

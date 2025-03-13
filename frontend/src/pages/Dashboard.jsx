@@ -12,6 +12,7 @@ const Dashboard = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [startDate, setStartDate] = useState("");
   const [endDate, setEndDate] = useState("");
+  const [transactionToEdit, setTransactionToEdit] = useState(null);
 
   useEffect(() => {
     const fetchTransactions = async () => {
@@ -37,11 +38,20 @@ const Dashboard = () => {
 
   // Show/hide form modal
   const handleShowForm = () => setShowModal(true);
-  const handleCloseForm = () => setShowModal(false);
+  const handleCloseForm = () => {
+    setShowModal(false);
+    setTransactionToEdit(null);
+  };
 
   // Function to add a transaction
   const addTransaction = (transaction) => {
     setTransactions([...transactions, transaction]);
+    handleCloseForm();
+  };
+
+  // Function to edit a transaction
+  const editTransaction = (updatedTransaction) => {
+    setTransactions(transactions.map(tx => (tx._id === updatedTransaction._id ? updatedTransaction : tx)));
     handleCloseForm();
   };
 
@@ -68,6 +78,12 @@ const Dashboard = () => {
     return isCategoryMatch && isDateMatch;
   });
 
+  // Sort transactions by date in descending order for table view
+  const sortedTransactionsForTable = filteredTransactions.sort((a, b) => new Date(b.date) - new Date(a.date));
+
+  // Sort transactions by date in ascending order for chart view
+  const sortedTransactionsForChart = [...filteredTransactions].sort((a, b) => new Date(a.date) - new Date(b.date));
+
   return (
     <Container className="mt-4">
       <Container className="mt-2 mb-4">
@@ -77,7 +93,7 @@ const Dashboard = () => {
               {showTable ? "View Chart" : "View Table"}
             </Button>
             <Button variant="success" onClick={handleShowForm} className="rounded-pill px-4">
-              Add Expense
+              Add Transaction
             </Button>
           </div>
         </div>
@@ -121,18 +137,18 @@ const Dashboard = () => {
       </Row>
 
       {showTable ? (
-        <TransactionTable transactions={filteredTransactions} onDelete={deleteTransaction} />
+        <TransactionTable transactions={sortedTransactionsForTable} onDelete={deleteTransaction} onEdit={(tx) => { setTransactionToEdit(tx); handleShowForm(); }} />
       ) : (
-        <TransactionChart transactions={filteredTransactions} />
+        <TransactionChart transactions={sortedTransactionsForChart} selectedCategory={selectedCategory} />
       )}
 
-      {/* Add Transaction Modal */}
+      {/* Add/Edit Transaction Modal */}
       <Modal show={showModal} onHide={handleCloseForm}>
         <Modal.Header closeButton>
-          <Modal.Title>Add Transaction</Modal.Title>
+          <Modal.Title>{transactionToEdit ? "Edit Transaction" : "Add Transaction"}</Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          <TransactionForm addTransaction={addTransaction} />
+          <TransactionForm addTransaction={addTransaction} editTransaction={editTransaction} transactionToEdit={transactionToEdit} closeModal={handleCloseForm} />
         </Modal.Body>
       </Modal>
     </Container>
